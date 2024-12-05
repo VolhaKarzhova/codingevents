@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org/">
+<head th:replace="fragments :: head">
+<body class="container">All Events
+<nav th:replace="fragments :: navigation"></nav>
+<table class="table table-striped">
+    <thead class="thead-dark">
+    <tr>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Address</th>
+    </tr>
+    </thead>
+    <tr th:each="event : ${eventsWithDesc}">
+        <td th:text="${event.key}"></td>
+        <td th:text="${event.value}"></td>
+        <td th:replace="fragments :: address"></td>
+    </tr>
+</table>
+</body>
+</html>
