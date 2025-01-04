@@ -1,5 +1,7 @@
 package com.example.codingevents.models;
 
+import jakarta.validation.constraints.*;
+
 import java.util.Objects;
 
 public class Event {
@@ -7,15 +9,65 @@ public class Event {
     private int id;
     private static int nextId = 1;
 
+    @NotBlank(message = "Name is required.")
+    @Size(min = 3, max = 50, message = "Name should be within a range between 3 and 50.")
     private String name;
+
+    @Size(max = 500, message = "Description is too long.")
     private String description;
 
-    public Event(String name, String description) {
+    @NotBlank(message = "Email is required.")
+    @Email(message = "Invalid email. Try again.")
+    private String contactEmail;
+
+    @NotBlank(message="Location is required.")
+    private String location;
+
+    @AssertTrue(message = "Cannot be false")
+    private boolean registrationRequired;
+
+    @Positive(message="Number of attendees must be one or more.")
+    private int numberOfAttendees;
+
+    public Event(String name, String description, String contactEmail, String location, boolean registrationRequired,
+                 int numberOfAttendees) {
         this.name = name;
         this.description = description;
+        this.contactEmail = contactEmail;
+        this.location = location;
+        this.registrationRequired = registrationRequired;
+        this.numberOfAttendees = numberOfAttendees;
         this.id = nextId;
         nextId++;
     }
+
+    public Event(){}
+
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public void setNumberOfAttendees(int numberOfAttendees) {
+        this.numberOfAttendees = numberOfAttendees;
+    }
+
+    public void setRegistrationRequired(boolean registrationRequired) {
+        this.registrationRequired = registrationRequired;
+    }
+
+    public int getNumberOfAttendees() {
+        return numberOfAttendees;
+    }
+
+    public boolean isRegistrationRequired() {
+        return registrationRequired;
+    }
+
 
     public int getId() {
         return id;
@@ -35,6 +87,14 @@ public class Event {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getContactEmail() {
+        return contactEmail;
+    }
+
+    public void setContactEmail(String contactEmail) {
+        this.contactEmail = contactEmail;
     }
 
     @Override
