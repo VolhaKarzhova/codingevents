@@ -1,13 +1,21 @@
 package com.example.codingevents.models;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
 import jakarta.validation.constraints.*;
+
 
 import java.util.Objects;
 
+@Entity
 public class Event {
 
+    @Id
+    @GeneratedValue
     private int id;
-    private static int nextId = 1;
+
+    //private static int nextId = 1;
 
     @NotBlank(message = "Name is required.")
     @Size(min = 3, max = 50, message = "Name should be within a range between 3 and 50.")
@@ -33,7 +41,7 @@ public class Event {
 
     public Event(String name, String description, String contactEmail, String location, boolean registrationRequired,
                  int numberOfAttendees, EventType type) {
-        this();
+       // this();
         this.name = name;
         this.description = description;
         this.contactEmail = contactEmail;
@@ -45,8 +53,8 @@ public class Event {
     }
 
     public Event(){
-        this.id = nextId;
-        nextId++;
+       // this.id = nextId;
+        //nextId++;
     }
 
 
