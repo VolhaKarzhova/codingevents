@@ -26,7 +26,7 @@
         <td th:text="${event.location}"></td>
         <td th:text="${event.isRegistrationRequired}"></td>
         <td th:text="${event.numberOfAttendees}"></td>
-        <td th:text="${event.type.displayName}"></td>
+        <td th:text="${event.type}"></td>
         <td>
             <a th:href="@{/events/edit/{id}(id=${event.id})}">Edit</a>
         </td>

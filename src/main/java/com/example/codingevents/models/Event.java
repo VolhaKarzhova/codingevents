@@ -15,8 +15,6 @@ public class Event {
     @GeneratedValue
     private int id;
 
-    //private static int nextId = 1;
-
     @NotBlank(message = "Name is required.")
     @Size(min = 3, max = 50, message = "Name should be within a range between 3 and 50.")
     private String name;
@@ -41,7 +39,6 @@ public class Event {
 
     public Event(String name, String description, String contactEmail, String location, boolean registrationRequired,
                  int numberOfAttendees, EventType type) {
-       // this();
         this.name = name;
         this.description = description;
         this.contactEmail = contactEmail;
@@ -53,8 +50,7 @@ public class Event {
     }
 
     public Event(){
-       // this.id = nextId;
-        //nextId++;
+
     }
 
 
