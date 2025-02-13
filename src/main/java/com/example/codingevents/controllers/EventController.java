@@ -1,8 +1,9 @@
 package com.example.codingevents.controllers;
 
+import com.example.codingevents.data.EventCategoryRepository;
 import com.example.codingevents.data.EventRepository;
 import com.example.codingevents.models.Event;
-import com.example.codingevents.models.EventType;
+import com.example.codingevents.models.EventCategory;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,10 +21,25 @@ public class EventController {
     @Autowired
     private EventRepository eventRepository;
 
+    @Autowired
+    private EventCategoryRepository eventCategoryRepository;
+
     @GetMapping
-    public String displayAllEvents(Model model){
-        model.addAttribute("title", "All Events");
-        model.addAttribute("events", eventRepository.findAll());
+    public String displayAllEvents(@RequestParam(required = false) Integer categoryId, Model model){
+        if(categoryId == null) {
+            model.addAttribute("title", "All Events");
+            model.addAttribute("events", eventRepository.findAll());
+        } else {
+            Optional<EventCategory> result = eventCategoryRepository.findById(categoryId);
+            if (result.isEmpty()) {
+                model.addAttribute("title", "Invalid category ID: " + categoryId);
+            } else {
+                EventCategory category = result.get();
+                model.addAttribute("title", "Events in category: " + category.getName());
+                model.addAttribute("events", category.getEvents());
+            }
+
+        }
         return "events/index";
     }
 
@@ -32,7 +48,7 @@ public class EventController {
     public String displayCreateEventForm(Model model) {
         model.addAttribute("title", "Create Event");
         model.addAttribute(new Event());
-        model.addAttribute("types", EventType.values());
+        model.addAttribute("categories", eventCategoryRepository.findAll());
         return "events/create";
 
     }
@@ -79,8 +95,8 @@ public class EventController {
     public String processEditForm(int eventId, String name, String description, String contactEmail) {
         Event eventToEdit = eventRepository.findById(eventId).orElse(null);
         eventToEdit.setName(name);
-        eventToEdit.setDescription(description);
-        eventToEdit.setDescription(contactEmail);
+//        eventToEdit.setEventDetails();
+//        eventToEdit.setDescription(contactEmail);
         return "redirect:/events";
     }
 

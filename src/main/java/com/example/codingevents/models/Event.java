@@ -1,89 +1,46 @@
 package com.example.codingevents.models;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 
-
-import java.util.Objects;
-
 @Entity
-public class Event {
-
-    @Id
-    @GeneratedValue
-    private int id;
+public class Event extends AbstractEntity {
 
     @NotBlank(message = "Name is required.")
     @Size(min = 3, max = 50, message = "Name should be within a range between 3 and 50.")
     private String name;
 
-    @Size(max = 500, message = "Description is too long.")
-    private String description;
+    @ManyToOne
+    @NotNull(message = "Field is required")
+    private EventCategory category;//one category for an event
 
-    @NotBlank(message = "Email is required.")
-    @Email(message = "Invalid email. Try again.")
-    private String contactEmail;
+    @OneToOne(cascade = CascadeType.ALL)//say save this object with every saved event object
+    @Valid//allows to enforce validation rules that are inside this class EventDetails
+    @NotNull
+    private EventDetails eventDetails;
 
-    @NotBlank(message="Location is required.")
-    private String location;
-
-    @AssertTrue(message = "Cannot be false")
-    private boolean registrationRequired;
-
-    @Positive(message="Number of attendees must be one or more.")
-    private int numberOfAttendees;
-
-    private EventType type;
-
-    public Event(String name, String description, String contactEmail, String location, boolean registrationRequired,
-                 int numberOfAttendees, EventType type) {
+    public Event(String name, EventCategory category) {
         this.name = name;
-        this.description = description;
-        this.contactEmail = contactEmail;
-        this.location = location;
-        this.registrationRequired = registrationRequired;
-        this.numberOfAttendees = numberOfAttendees;
-        this.type = type;
-
+        this.category = category;
     }
 
     public Event(){
 
     }
 
-
-    public String getLocation() {
-        return location;
+    public EventCategory getCategory() {
+        return category;
     }
 
-    public void setLocation(String location) {
-        this.location = location;
+    public void setCategory(EventCategory eventCategory) {
+        this.category = eventCategory;
     }
 
-    public void setNumberOfAttendees(int numberOfAttendees) {
-        this.numberOfAttendees = numberOfAttendees;
-    }
-
-    public void setRegistrationRequired(boolean registrationRequired) {
-        this.registrationRequired = registrationRequired;
-    }
-
-    public int getNumberOfAttendees() {
-        return numberOfAttendees;
-    }
-
-    public boolean isRegistrationRequired() {
-        return registrationRequired;
-    }
-
-
-    public int getId() {
-        return id;
-    }
-
-    public String getName() {
+   public String getName() {
         return name;
     }
 
@@ -91,50 +48,19 @@ public class Event {
         this.name = name;
     }
 
-    public String getDescription() {
-        return description;
+    public EventDetails getEventDetails() {
+        return eventDetails;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getContactEmail() {
-        return contactEmail;
-    }
-
-    public void setContactEmail(String contactEmail) {
-        this.contactEmail = contactEmail;
-    }
-
-    public EventType getType() {
-        return type;
-    }
-
-    public Event setType(EventType type) {
-        this.type = type;
-        return this;
+    public void setEventDetails(EventDetails eventDetails) {
+        this.eventDetails = eventDetails;
     }
 
     @Override
     public String toString() {
         return "Event{" +
-                "id=" + id +
+                "id=" + getId() +
                 ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
                 '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Event event = (Event) o;
-        return id == event.id;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(id);
     }
 }
